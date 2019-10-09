@@ -38,6 +38,7 @@ for line in f1:
 
     Regles.append(R)
 
+#test1
 
 
 
