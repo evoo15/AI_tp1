@@ -38,7 +38,8 @@ for line in f1:
 
     Regles.append(R)
 
-    #test2
+#test1
+ #test2
 
 
 
