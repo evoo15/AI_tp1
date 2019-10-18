@@ -94,7 +94,6 @@ class Base:
         self.trace = ''
 
     def chargerbase(self):
-        print('REGLES URL', self.reglesURL)
         fileRegles = open(self.reglesURL, "r")
         f1 = fileRegles.readlines()
         for line in f1:
@@ -198,12 +197,21 @@ class Base:
 #         print(premisse.operande)
 #         print(premisse.valeur)
 
+# algorithme de saturation
 def saturerBF(base: Base):
     while len(base.filtrerRegles()) > 0:
+        #choix de la regle et la desactivation
         regle = base.choisirRegle()
+
+        #ajout de la regle dans la BF
         base.union(regle.concl())
+
     print(base.trace)
     outF = open("result.txt", "w+")
     outF.write(base.trace)
     outF.close()
+
+
+def chercherBut():
+    print('chercher but')
 # saturerBF()
