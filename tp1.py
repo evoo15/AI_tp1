@@ -94,7 +94,7 @@ class Base:
         self.trace = ''
 
     def chargerbase(self):
-
+        print('REGLES URL', self.reglesURL)
         fileRegles = open(self.reglesURL, "r")
         f1 = fileRegles.readlines()
         for line in f1:
@@ -180,8 +180,7 @@ class Base:
             self.trace += "\n Ajout du fait:   " + conclusion.attribut + " = " + conclusion.valeur
 
 
-base = Base()
-base.chargerbase()
+# base.chargerbase()
 
 
 # For Testing Chargement de la Base
@@ -199,11 +198,12 @@ base.chargerbase()
 #         print(premisse.operande)
 #         print(premisse.valeur)
 
-def saturerBF():
+def saturerBF(base: Base):
     while len(base.filtrerRegles()) > 0:
         regle = base.choisirRegle()
         base.union(regle.concl())
     print(base.trace)
-
-
-saturerBF()
+    outF = open("result.txt", "w+")
+    outF.write(base.trace)
+    outF.close()
+# saturerBF()
