@@ -51,7 +51,7 @@ def demarrer():
 
             if mode.get() == 2:
                 print('on va chercher le but')
-                tp1.chercherBut()
+                tp1.chercherBut("TrÃ¨s bons restaurants = Vrai",base)
 
 
 master = tk.Tk()

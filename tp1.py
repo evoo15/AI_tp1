@@ -211,7 +211,38 @@ def saturerBF(base: Base):
     outF.write(base.trace)
     outF.close()
 
-
-def chercherBut():
+#Le butString dans ce cas est une chaine dédiée à partir de l'Interface UI
+#exemple le butString= "Très bons restaurants= Vrai
+def chercherBut(butString,base:Base):
     print('chercher but')
+    but=Fait()
+    but.attribut=butString.strip().upper().split("=")[0].strip()
+    but.valeur=butString.strip().upper().split("=")[-1].strip()
+    if(but.exists(base.baseFaits)==True):
+        base.trace += "\n Le But " + but.attribut + " = " + but.valeur + " a été trouvé"
+        print(base.trace)
+        outF = open("result.txt", "w+")
+        outF.write(base.trace)
+        outF.close()
+        return True
+    while len(base.filtrerRegles()) > 0:
+        #choix de la regle et la desactivation
+        regle = base.choisirRegle()
+
+        #ajout de la regle dans la BF
+        base.union(regle.concl())
+        if(but.exists(base.baseFaits)):
+            base.trace+="\n Le But "+but.attribut+" = "+but.valeur+" a été trouvé"
+            print(base.trace)
+            outF = open("result.txt", "w+")
+            outF.write(base.trace)
+            outF.close()
+            return True
+    base.trace+="Le But "+but.attribut+" = "+but.valeur+"n'a pas été trouvé"
+    print(base.trace)
+    outF = open("result.txt", "w+")
+    outF.write(base.trace)
+    outF.close()
+    return False
+
 # saturerBF()
