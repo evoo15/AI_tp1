@@ -94,7 +94,7 @@ class Base:
         self.trace = ''
 
     def chargerbase(self):
-        fileRegles = open(self.reglesURL, "r")
+        fileRegles = open(self.reglesURL, "r", encoding='utf-8')
         f1 = fileRegles.readlines()
         for line in f1:
             # chargement des regles
@@ -145,7 +145,7 @@ class Base:
                 premissesTab.append(premisse)
             self.baseRegles.append(Regle(premissesTab, conclusion))
         # chargement des faits
-        fileFaits = open(self.faitURL, "r")
+        fileFaits = open(self.faitURL, "r", encoding='utf-8')
         f2 = fileFaits.readlines()
         for line in f2:
             fait = Fait()
@@ -200,49 +200,52 @@ class Base:
 # algorithme de saturation
 def saturerBF(base: Base):
     while len(base.filtrerRegles()) > 0:
-        #choix de la regle et la desactivation
+        # choix de la regle et la desactivation
         regle = base.choisirRegle()
 
-        #ajout de la regle dans la BF
+        # ajout de la regle dans la BF
         base.union(regle.concl())
 
     print(base.trace)
-    outF = open("result.txt", "w+")
+    outF = open("result.txt", "w+", encoding='utf-8')
     outF.write(base.trace)
     outF.close()
 
-#Le butString dans ce cas est une chaine dédiée à partir de l'Interface UI
-#exemple le butString= "Très bons restaurants= Vrai
-def chercherBut(butString,base:Base):
+
+# Le butString dans ce cas est une chaine dédiée à partir de l'Interface UI
+# exemple le butString= "Très bons restaurants= Vrai
+def chercherBut(butString, base: Base):
     print('chercher but')
-    but=Fait()
-    but.attribut=butString.strip().upper().split("=")[0].strip()
-    but.valeur=butString.strip().upper().split("=")[-1].strip()
-    if(but.exists(base.baseFaits)==True):
+    but = Fait()
+    but.attribut = butString.strip().upper().split("=")[0].strip()
+    but.valeur = butString.strip().upper().split("=")[-1].strip()
+    if (but.exists(base.baseFaits) == True):
         base.trace += "\n Le But " + but.attribut + " = " + but.valeur + " a été trouvé"
         print(base.trace)
-        outF = open("result.txt", "w+")
+        outF = open("result.txt", "w+", encoding='utf-8')
         outF.write(base.trace)
         outF.close()
         return True
     while len(base.filtrerRegles()) > 0:
-        #choix de la regle et la desactivation
+        # choix de la regle et la desactivation
         regle = base.choisirRegle()
 
-        #ajout de la regle dans la BF
+        # ajout de la regle dans la BF
         base.union(regle.concl())
-        if(but.exists(base.baseFaits)):
-            base.trace+="\n Le But "+but.attribut+" = "+but.valeur+" a été trouvé"
+        if (but.exists(base.baseFaits)):
+            base.trace += "\n Le But " + but.attribut + " = " + but.valeur + " a été trouvé"
             print(base.trace)
-            outF = open("result.txt", "w+")
+            outF = open("result.txt", "w+", encoding='utf-8')
             outF.write(base.trace)
             outF.close()
             return True
-    base.trace+="Le But "+but.attribut+" = "+but.valeur+"n'a pas été trouvé"
+    base.trace += "Le But " + but.attribut + " = " + but.valeur + "n'a pas été trouvé"
     print(base.trace)
-    outF = open("result.txt", "w+")
+    outF = open("result.txt", "w+", encoding='utf-8')
     outF.write(base.trace)
     outF.close()
     return False
 
 # saturerBF()
+
+chercherBut("TrÃ¨s bons restaurants = Vrai", Base())
