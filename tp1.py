@@ -1,8 +1,9 @@
 # la classe fait peut se comporter comme un fait ou comme une conclusion puisque les deux ont seulement les attribut valeur et atrribut
 class Fait:
-    def __init__(self, att='', val=''):
+    def __init__(self, att='', val='', unsplitted=''):
         self.attribut = att
         self.valeur = val
+        self.unsplitted = unsplitted
 
     # checks if fait mawjoud fel base des faits
     def exists(self, base_faits):
@@ -14,10 +15,11 @@ class Fait:
 
 class Regle:
 
-    def __init__(self, prem=[], conc=None):
+    def __init__(self, prem=[], conc=None, unsplitted=''):
         self.premises = prem
         self.conclusion = conc
         self.desactive = 0
+        self.unsplitted = unsplitted
 
     def verif(self, faits):
         for premise in self.premises:
@@ -83,7 +85,7 @@ def create_executed_tab(regles):
 # le type est par defaut chainage en avant "ch_avant"
 # option est par defaut saturation de la base "sat_base"
 class Base:
-    def __init__(self, reglesurl="villes/regles.txt", faitsurl="villes/bf.txt", type="ch_avant", option="sat_base"):
+    def __init__(self, reglesurl="villes/regles.txt", faitsurl="villes/bf.txt", type="ch_avant", option="sat_base", ):
         self.reglesURL = reglesurl
         self.faitURL = faitsurl
         self.type = type
@@ -92,6 +94,7 @@ class Base:
         self.baseRegles = []
         self.reglesFiltres = []
         self.trace = ''
+        self.butFound = 0
 
     def chargerbase(self):
         fileRegles = open(self.reglesURL, "r", encoding='utf-8')
@@ -102,6 +105,7 @@ class Base:
             premisses = lineTemp.split("alors ", 1)[0].strip()
             conclusionLine = lineTemp.split("alors ", 1)[-1].strip()
             conclusion = Fait()
+            conclusion.unsplitted = conclusionLine
             conclusion.attribut = conclusionLine.split("=", 1)[0].strip()
             conclusion.valeur = conclusionLine.split("=", 1)[-1].strip()
 
@@ -143,12 +147,14 @@ class Base:
                     premisse.valeur = prem.split(">")[-1].strip()
 
                 premissesTab.append(premisse)
-            self.baseRegles.append(Regle(premissesTab, conclusion))
+
+            self.baseRegles.append(Regle(premissesTab, conclusion, line))
         # chargement des faits
         fileFaits = open(self.faitURL, "r", encoding='utf-8')
         f2 = fileFaits.readlines()
         for line in f2:
             fait = Fait()
+            fait.unsplitted = line
             fait.attribut = line.strip().split("= ")[0].strip()
             fait.valeur = line.strip().split("= ")[-1].strip()
             self.baseFaits.append(fait)
@@ -156,16 +162,18 @@ class Base:
 
     # retourne une liste avec les regles déclenchables,
     def filtrerRegles(self):
+        self.trace += '*******  Filtrage des regles déclenchables *******: \n'
         self.reglesFiltres = []
         for regle in self.baseRegles:
             if regle.verif(self.baseFaits) and regle.desactive == 0:
                 print('regle non desactive trouvee')
                 self.reglesFiltres.append(regle)
+                self.trace += regle.unsplitted + '\n'
         return self.reglesFiltres
 
     def choisirRegle(self):
         print('choisir regle')
-
+        self.trace += '******* On choisit la regle ******** : \n' + self.reglesFiltres[0].unsplitted + '\n'
         return self.reglesFiltres[0]
 
     def union(self, conclusion: Fait):
@@ -176,7 +184,7 @@ class Base:
             print('conclusion nexiste pas dans BF, donc UNION')
 
             self.baseFaits.append(conclusion)
-            self.trace += "\n Ajout du fait:   " + conclusion.attribut + " = " + conclusion.valeur
+            self.trace += "******* Ajout du fait ******* : \n" + conclusion.attribut + " = " + conclusion.valeur + '\n'
 
 
 # base.chargerbase()
@@ -206,6 +214,10 @@ def saturerBF(base: Base):
         # ajout de la regle dans la BF
         base.union(regle.concl())
 
+    base.trace += 'FIN DE SATURATION DE LA BASE\n\n'
+    base.trace += '******* Nouvelle Base des faits: ******* \n'
+    for fait in base.baseFaits:
+        base.trace += fait.unsplitted + '\n'
     print(base.trace)
     outF = open("result.txt", "w+", encoding='utf-8')
     outF.write(base.trace)
@@ -235,11 +247,12 @@ def chercherBut(butString, base: Base):
         if (but.exists(base.baseFaits)):
             base.trace += "\n Le But " + but.attribut + " = " + but.valeur + " a été trouvé"
             print(base.trace)
+            base.butFound = 1
             outF = open("result.txt", "w+", encoding='utf-8')
             outF.write(base.trace)
             outF.close()
             return True
-    base.trace += "Le But " + but.attribut + " = " + but.valeur + "n'a pas été trouvé"
+    base.trace += "\n Le But " + but.attribut + " = " + but.valeur + " n'a pas été trouvé"
     print(base.trace)
     outF = open("result.txt", "w+", encoding='utf-8')
     outF.write(base.trace)
@@ -248,4 +261,4 @@ def chercherBut(butString, base: Base):
 
 # saturerBF()
 
-chercherBut("TrÃ¨s bons restaurants = Vrai", Base())
+# chercherBut("TrÃ¨s bons restaurants = Vrai", Base())
