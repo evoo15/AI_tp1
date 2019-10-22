@@ -1,15 +1,15 @@
-si Echelle_de_vigilance_MeteoFrance != "Pas de vigilance particulière" alors Nepassortir = Vrai
-si Temps == "Pluie" alors Parapluie = Vrai
+si Echelle_de_vigilance_MeteoFrance != Pas de vigilance particulière alors Nepassortir = Vrai
+si Temps == Pluie alors Parapluie = Vrai
 
-si Pression < 1015 & Température > 0 alors Temps = "Pluie"
-si Pression < 1015 & Température <= 0 alors Temps = "Neige"
-si Pression >= 1015 & Température > 10 alors Temps = "Beau temps "
-si Pression >= 1015 & Température <= 10 alors Temps = "Brouillards "
+si Pression < 1015 & Température > 0 alors Temps = Pluie
+si Pression < 1015 & Température <= 0 alors Temps = Neige
+si Pression >= 1015 & Température > 10 alors Temps = Beau temps 
+si Pression >= 1015 & Température <= 10 alors Temps = Brouillards 
 
-si Echelle_de_Beaufort < 7 alors Echelle_de_vigilance_MeteoFrance = "Pas de vigilance particulière"
-si Echelle_de_Beaufort >= 7 & Echelle_de_Beaufort < 8 alors Echelle_de_vigilance_MeteoFrance = "Soyez attentif"
-si Echelle_de_Beaufort >= 8 & Echelle_de_Beaufort < 10 alors Echelle_de_vigilance_MeteoFrance = "Soyez très vigilant"
-si Echelle_de_Beaufort >= 10 alors Echelle_de_vigilance_MeteoFrance = "Une vigilance absolue s'impose"
+si Echelle_de_Beaufort < 7 alors Echelle_de_vigilance_MeteoFrance = Pas de vigilance particulière
+si Echelle_de_Beaufort >= 7 & Echelle_de_Beaufort < 8 alors Echelle_de_vigilance_MeteoFrance = Soyez attentif
+si Echelle_de_Beaufort >= 8 & Echelle_de_Beaufort < 10 alors Echelle_de_vigilance_MeteoFrance = Soyez très vigilant
+si Echelle_de_Beaufort >= 10 alors Echelle_de_vigilance_MeteoFrance = Une vigilance absolue s'impose
 
 si Vitesse_du_vent < 1 alors Echelle_de_Beaufort = 0
 si Vitesse_du_vent > 1 & Vitesse_du_vent <= 5 alors Echelle_de_Beaufort = 1

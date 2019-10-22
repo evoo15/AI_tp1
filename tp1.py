@@ -8,7 +8,7 @@ class Fait:
     # checks if fait mawjoud fel base des faits
     def exists(self, base_faits):
         for fait in base_faits:
-            if (self.attribut.upper() == fait.attribut.upper()):
+            if (self.attribut.upper().strip() == fait.attribut.upper().strip() and self.valeur.upper().strip() == fait.valeur.upper().strip()):
                 return True
         return False
 
@@ -95,6 +95,28 @@ class Base:
         self.reglesFiltres = []
         self.trace = ''
         self.butFound = 0
+        self.traceUI=''
+    #Cette fonction reformule le resultat affiché dans l'interface UI
+    def getTraceUISaturation(self):
+        self.traceUI=''
+        self.traceUI+="La Saturation de la Base est terminé"
+        self.traceUI+="\n Votre nouvelle Base des Faits est :\n { \n"
+        for fait in self.baseFaits:
+            self.traceUI+=fait.attribut+' = '+fait.valeur+' ,\n '
+        self.traceUI+=' }'
+        return self.traceUI
+    def getTraceUIBut(self):
+        self.traceUI=''
+        self.traceUI+=self.trace.splitlines()[-1]
+        self.traceUI += "\n Votre nouvelle Base des Faits est :\n { \n"
+        for fait in self.baseFaits:
+            self.traceUI += fait.attribut + ' = ' + fait.valeur + ' ,\n '
+        self.traceUI += ' }'
+        return self.traceUI
+
+
+
+
 
     def chargerbase(self):
         fileRegles = open(self.reglesURL, "r", encoding='utf-8')
@@ -234,6 +256,7 @@ def chercherBut(butString, base: Base):
     if (but.exists(base.baseFaits) == True):
         base.trace += "\n Le But " + but.attribut + " = " + but.valeur + " a été trouvé"
         print(base.trace)
+        base.butFound = 1
         outF = open("result.txt", "w+", encoding='utf-8')
         outF.write(base.trace)
         outF.close()

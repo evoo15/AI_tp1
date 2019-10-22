@@ -55,7 +55,7 @@ def demarrer():
             if mode.get() == 1:
                 print('on va saturer')
                 tp1.saturerBF(base)
-                resultText.config(text=base.trace)
+                resultText.config(text=base.getTraceUISaturation())
                 messagebox.showinfo("SUCCES", "La base des faits est saturée")
 
 
@@ -70,8 +70,9 @@ def demarrer():
                     tp1.chercherBut(but, base)
                     if base.butFound == 1:
                         messagebox.showinfo("SUCCES", "Le but est trouvé ")
+                        resultText.config(text=base.getTraceUIBut())
                     else:
-                        resultText.config(text=base.trace)
+                        resultText.config(text=base.getTraceUIBut())
                         messagebox.showinfo("ERREUR", "Le but n'est pas trouvé ")
 
 
